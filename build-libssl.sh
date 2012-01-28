@@ -33,7 +33,7 @@ SDKVERSION="5.0"
 
 
 CURRENTPATH=`pwd`
-CONFIG_VAR="no-dso no-dsa no-engine no-gost no-ec no-dh no-krb5 no-asm"
+CONFIG_VAR="no-dso no-dsa no-engine no-gost no-ec no-dh no-krb5 no-asm no-hw no-des no-ssl2 no-idea no-rc2 -DOPENSSL_NO_BUF_FREELISTS"
 
 set -e
 if [ ! -e openssl-${VERSION}.tar.gz ]; then

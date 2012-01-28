@@ -5,6 +5,9 @@
 #ifndef OPENSSL_DOING_MAKEDEPEND
 
 
+#ifndef OPENSSL_NO_DES
+# define OPENSSL_NO_DES
+#endif
 #ifndef OPENSSL_NO_DH
 # define OPENSSL_NO_DH
 #endif
@@ -29,6 +32,9 @@
 #ifndef OPENSSL_NO_GOST
 # define OPENSSL_NO_GOST
 #endif
+#ifndef OPENSSL_NO_IDEA
+# define OPENSSL_NO_IDEA
+#endif
 #ifndef OPENSSL_NO_JPAKE
 # define OPENSSL_NO_JPAKE
 #endif
@@ -38,11 +44,20 @@
 #ifndef OPENSSL_NO_MD2
 # define OPENSSL_NO_MD2
 #endif
+#ifndef OPENSSL_NO_MDC2
+# define OPENSSL_NO_MDC2
+#endif
+#ifndef OPENSSL_NO_RC2
+# define OPENSSL_NO_RC2
+#endif
 #ifndef OPENSSL_NO_RC5
 # define OPENSSL_NO_RC5
 #endif
 #ifndef OPENSSL_NO_RFC3779
 # define OPENSSL_NO_RFC3779
+#endif
+#ifndef OPENSSL_NO_SSL2
+# define OPENSSL_NO_SSL2
 #endif
 #ifndef OPENSSL_NO_STORE
 # define OPENSSL_NO_STORE
@@ -56,6 +71,9 @@
 #ifndef OPENSSL_NO_ASM
 # define OPENSSL_NO_ASM
 #endif
+#ifndef OPENSSL_NO_HW
+# define OPENSSL_NO_HW
+#endif
 #ifndef OPENSSL_NO_DYNAMIC_ENGINE
 # define OPENSSL_NO_DYNAMIC_ENGINE
 #endif
@@ -65,6 +83,9 @@
    who haven't had the time to do the appropriate changes in their
    applications.  */
 #ifdef OPENSSL_ALGORITHM_DEFINES
+# if defined(OPENSSL_NO_DES) && !defined(NO_DES)
+#  define NO_DES
+# endif
 # if defined(OPENSSL_NO_DH) && !defined(NO_DH)
 #  define NO_DH
 # endif
@@ -89,6 +110,9 @@
 # if defined(OPENSSL_NO_GOST) && !defined(NO_GOST)
 #  define NO_GOST
 # endif
+# if defined(OPENSSL_NO_IDEA) && !defined(NO_IDEA)
+#  define NO_IDEA
+# endif
 # if defined(OPENSSL_NO_JPAKE) && !defined(NO_JPAKE)
 #  define NO_JPAKE
 # endif
@@ -98,11 +122,20 @@
 # if defined(OPENSSL_NO_MD2) && !defined(NO_MD2)
 #  define NO_MD2
 # endif
+# if defined(OPENSSL_NO_MDC2) && !defined(NO_MDC2)
+#  define NO_MDC2
+# endif
+# if defined(OPENSSL_NO_RC2) && !defined(NO_RC2)
+#  define NO_RC2
+# endif
 # if defined(OPENSSL_NO_RC5) && !defined(NO_RC5)
 #  define NO_RC5
 # endif
 # if defined(OPENSSL_NO_RFC3779) && !defined(NO_RFC3779)
 #  define NO_RFC3779
+# endif
+# if defined(OPENSSL_NO_SSL2) && !defined(NO_SSL2)
+#  define NO_SSL2
 # endif
 # if defined(OPENSSL_NO_STORE) && !defined(NO_STORE)
 #  define NO_STORE
