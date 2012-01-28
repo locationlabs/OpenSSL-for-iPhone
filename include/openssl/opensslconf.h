@@ -5,8 +5,29 @@
 #ifndef OPENSSL_DOING_MAKEDEPEND
 
 
+#ifndef OPENSSL_NO_DH
+# define OPENSSL_NO_DH
+#endif
+#ifndef OPENSSL_NO_DSA
+# define OPENSSL_NO_DSA
+#endif
+#ifndef OPENSSL_NO_EC
+# define OPENSSL_NO_EC
+#endif
+#ifndef OPENSSL_NO_ECDH
+# define OPENSSL_NO_ECDH
+#endif
+#ifndef OPENSSL_NO_ECDSA
+# define OPENSSL_NO_ECDSA
+#endif
+#ifndef OPENSSL_NO_ENGINE
+# define OPENSSL_NO_ENGINE
+#endif
 #ifndef OPENSSL_NO_GMP
 # define OPENSSL_NO_GMP
+#endif
+#ifndef OPENSSL_NO_GOST
+# define OPENSSL_NO_GOST
 #endif
 #ifndef OPENSSL_NO_JPAKE
 # define OPENSSL_NO_JPAKE
@@ -32,6 +53,9 @@
 #ifndef OPENSSL_THREADS
 # define OPENSSL_THREADS
 #endif
+#ifndef OPENSSL_NO_ASM
+# define OPENSSL_NO_ASM
+#endif
 #ifndef OPENSSL_NO_DYNAMIC_ENGINE
 # define OPENSSL_NO_DYNAMIC_ENGINE
 #endif
@@ -41,8 +65,29 @@
    who haven't had the time to do the appropriate changes in their
    applications.  */
 #ifdef OPENSSL_ALGORITHM_DEFINES
+# if defined(OPENSSL_NO_DH) && !defined(NO_DH)
+#  define NO_DH
+# endif
+# if defined(OPENSSL_NO_DSA) && !defined(NO_DSA)
+#  define NO_DSA
+# endif
+# if defined(OPENSSL_NO_EC) && !defined(NO_EC)
+#  define NO_EC
+# endif
+# if defined(OPENSSL_NO_ECDH) && !defined(NO_ECDH)
+#  define NO_ECDH
+# endif
+# if defined(OPENSSL_NO_ECDSA) && !defined(NO_ECDSA)
+#  define NO_ECDSA
+# endif
+# if defined(OPENSSL_NO_ENGINE) && !defined(NO_ENGINE)
+#  define NO_ENGINE
+# endif
 # if defined(OPENSSL_NO_GMP) && !defined(NO_GMP)
 #  define NO_GMP
+# endif
+# if defined(OPENSSL_NO_GOST) && !defined(NO_GOST)
+#  define NO_GOST
 # endif
 # if defined(OPENSSL_NO_JPAKE) && !defined(NO_JPAKE)
 #  define NO_JPAKE

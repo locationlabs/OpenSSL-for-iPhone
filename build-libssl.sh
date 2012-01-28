@@ -33,6 +33,7 @@ SDKVERSION="5.0"
 
 
 CURRENTPATH=`pwd`
+CONFIG_VAR="no-dso no-dsa no-engine no-gost no-ec no-dh no-krb5 no-asm"
 
 set -e
 if [ ! -e openssl-${VERSION}.tar.gz ]; then
@@ -56,7 +57,7 @@ mkdir -p "${CURRENTPATH}/bin/iPhoneSimulator${SDKVERSION}.sdk"
 
 LOG="${CURRENTPATH}/bin/iPhoneSimulator${SDKVERSION}.sdk/build-openssl-${VERSION}.log"
 
-./configure BSD-generic32 --openssldir="${CURRENTPATH}/bin/iPhoneSimulator${SDKVERSION}.sdk" > "${LOG}" 2>&1
+./Configure BSD-generic32 ${CONFIG_VAR} --openssldir="${CURRENTPATH}/bin/iPhoneSimulator${SDKVERSION}.sdk" > "${LOG}" 2>&1
 # add -isysroot to CC=
 sed -ie "s!^CFLAG=!CFLAG=-isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator${SDKVERSION}.sdk !" "Makefile"
 
@@ -75,7 +76,7 @@ mkdir -p "${CURRENTPATH}/bin/iPhoneOS${SDKVERSION}-armv6.sdk"
 
 LOG="${CURRENTPATH}/bin/iPhoneOS${SDKVERSION}-armv6.sdk/build-openssl-${VERSION}.log"
 
-./configure BSD-generic32 --openssldir="${CURRENTPATH}/bin/iPhoneOS${SDKVERSION}-armv6.sdk" > "${LOG}" 2>&1
+./Configure BSD-generic32 ${CONFIG_VAR} --openssldir="${CURRENTPATH}/bin/iPhoneOS${SDKVERSION}-armv6.sdk" > "${LOG}" 2>&1
 
 sed -ie "s!^CFLAG=!CFLAG=-isysroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS${SDKVERSION}.sdk !" "Makefile"
 # remove sig_atomic for iPhoneOS
@@ -97,7 +98,7 @@ mkdir -p "${CURRENTPATH}/bin/iPhoneOS${SDKVERSION}-armv7.sdk"
 LOG="${CURRENTPATH}/bin/iPhoneOS${SDKVERSION}-armv7.sdk/build-openssl-${VERSION}.log"
 
 
-./configure BSD-generic32 --openssldir="${CURRENTPATH}/bin/iPhoneOS${SDKVERSION}-armv7.sdk" >> "${LOG}" 2>&1
+./Configure BSD-generic32 ${CONFIG_VAR} --openssldir="${CURRENTPATH}/bin/iPhoneOS${SDKVERSION}-armv7.sdk" >> "${LOG}" 2>&1
 
 sed -ie "s!^CFLAG=!CFLAG=-isysroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS${SDKVERSION}.sdk !" "Makefile"
 # remove sig_atomic for iPhoneOS
