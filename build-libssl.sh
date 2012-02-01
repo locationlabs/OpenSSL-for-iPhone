@@ -21,7 +21,7 @@
 ###########################################################################
 #  Change values here
 #
-VERSION="1.0.0f"
+VERSION="1.0.1-beta2"
 SDKVERSION="5.0"
 #
 ###########################################################################
@@ -46,6 +46,21 @@ fi
 mkdir -p "${CURRENTPATH}/src"
 tar zxf openssl-${VERSION}.tar.gz -C "${CURRENTPATH}/src"
 cd "${CURRENTPATH}/src/openssl-${VERSION}"
+
+############
+# MacOS X
+echo "Building openssl for MacOS X x86-64"
+echo "Please stand by..."
+
+mkdir -p "${CURRENTPATH}/bin/MacOSX"
+LOG="${CURRENTPATH}/bin/MacOSX/build-openssl-${VERSION}.log"
+
+./Configure darwin64-x86_64-cc ${CONFIG_VAR} --openssldir="${CURRENTPATH}/bin/MacOSX" > "${LOG}" 2>&1
+
+make >> "${LOG}" 2>&1
+make install >> "${LOG}" 2>&1
+make clean >> "${LOG}" 2>&1
+#############
 
 ############
 # iPhone Simulator
@@ -110,9 +125,10 @@ make clean >> "${LOG}" 2>&1
 #############
 
 echo "Build library..."
-lipo -create ${CURRENTPATH}/bin/iPhoneSimulator${SDKVERSION}.sdk/lib/libssl.a ${CURRENTPATH}/bin/iPhoneOS${SDKVERSION}-armv6.sdk/lib/libssl.a ${CURRENTPATH}/bin/iPhoneOS${SDKVERSION}-armv7.sdk/lib/libssl.a -output ${CURRENTPATH}/libssl.a
+lipo -create ${CURRENTPATH}/bin/MacOSX/lib/libssl.a ${CURRENTPATH}/bin/iPhoneSimulator${SDKVERSION}.sdk/lib/libssl.a ${CURRENTPATH}/bin/iPhoneOS${SDKVERSION}-armv6.sdk/lib/libssl.a ${CURRENTPATH}/bin/iPhoneOS${SDKVERSION}-armv7.sdk/lib/libssl.a -output ${CURRENTPATH}/libssl.a
 
-lipo -create ${CURRENTPATH}/bin/iPhoneSimulator${SDKVERSION}.sdk/lib/libcrypto.a ${CURRENTPATH}/bin/iPhoneOS${SDKVERSION}-armv6.sdk/lib/libcrypto.a ${CURRENTPATH}/bin/iPhoneOS${SDKVERSION}-armv7.sdk/lib/libcrypto.a -output ${CURRENTPATH}/libcrypto.a
+
+lipo -create ${CURRENTPATH}/bin/MacOSX/lib/libcrypto.a ${CURRENTPATH}/bin/iPhoneSimulator${SDKVERSION}.sdk/lib/libcrypto.a ${CURRENTPATH}/bin/iPhoneOS${SDKVERSION}-armv6.sdk/lib/libcrypto.a ${CURRENTPATH}/bin/iPhoneOS${SDKVERSION}-armv7.sdk/lib/libcrypto.a -output ${CURRENTPATH}/libcrypto.a
 
 mkdir -p ${CURRENTPATH}/include
 cp -R ${CURRENTPATH}/bin/iPhoneSimulator${SDKVERSION}.sdk/include/openssl ${CURRENTPATH}/include/

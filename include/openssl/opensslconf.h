@@ -17,6 +17,9 @@
 #ifndef OPENSSL_NO_EC
 # define OPENSSL_NO_EC
 #endif
+#ifndef OPENSSL_NO_EC_NISTP_64_GCC_128
+# define OPENSSL_NO_EC_NISTP_64_GCC_128
+#endif
 #ifndef OPENSSL_NO_ECDH
 # define OPENSSL_NO_ECDH
 #endif
@@ -55,6 +58,9 @@
 #endif
 #ifndef OPENSSL_NO_RFC3779
 # define OPENSSL_NO_RFC3779
+#endif
+#ifndef OPENSSL_NO_SCTP
+# define OPENSSL_NO_SCTP
 #endif
 #ifndef OPENSSL_NO_SSL2
 # define OPENSSL_NO_SSL2
@@ -95,6 +101,9 @@
 # if defined(OPENSSL_NO_EC) && !defined(NO_EC)
 #  define NO_EC
 # endif
+# if defined(OPENSSL_NO_EC_NISTP_64_GCC_128) && !defined(NO_EC_NISTP_64_GCC_128)
+#  define NO_EC_NISTP_64_GCC_128
+# endif
 # if defined(OPENSSL_NO_ECDH) && !defined(NO_ECDH)
 #  define NO_ECDH
 # endif
@@ -133,6 +142,9 @@
 # endif
 # if defined(OPENSSL_NO_RFC3779) && !defined(NO_RFC3779)
 #  define NO_RFC3779
+# endif
+# if defined(OPENSSL_NO_SCTP) && !defined(NO_SCTP)
+#  define NO_SCTP
 # endif
 # if defined(OPENSSL_NO_SSL2) && !defined(NO_SSL2)
 #  define NO_SSL2
