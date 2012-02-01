@@ -4,3 +4,4 @@ openssl-1*.tar.gz
 .DS_STORE
 OpenSSL-for-iOS.xcodeproj/project.xcworkspace/
 OpenSSL-for-iOS.xcodeproj/xcuserdata/
+include/openssl/opensslconf.h
