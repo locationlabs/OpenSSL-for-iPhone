@@ -37,7 +37,7 @@ INSTALL_DIR=${INSTALL_DIR:=${CURRENTPATH}/results}
 INSTALL_INC_DIR=${INSTALL_DIR}/include
 INSTALL_LIB_DIR=${INSTALL_DIR}/lib
 mkdir -p ${INSTALL_INC_DIR}
-mkdir -p ${INSTALL_LIB_DIR}
+mkdir -p ${INSTALL_LIB_DIR}/pkgconfig
 
 CONFIG_VAR="no-dso no-dsa no-engine no-gost no-ec no-dh no-krb5 no-asm no-hw no-des no-ssl2 no-idea no-rc2 -DOPENSSL_NO_BUF_FREELISTS"
 
@@ -137,6 +137,9 @@ lipo -create ${CURRENTPATH}/bin/MacOSX/lib/libssl.a ${CURRENTPATH}/bin/iPhoneSim
 lipo -create ${CURRENTPATH}/bin/MacOSX/lib/libcrypto.a ${CURRENTPATH}/bin/iPhoneSimulator${SDKVERSION}.sdk/lib/libcrypto.a ${CURRENTPATH}/bin/iPhoneOS${SDKVERSION}-armv6.sdk/lib/libcrypto.a ${CURRENTPATH}/bin/iPhoneOS${SDKVERSION}-armv7.sdk/lib/libcrypto.a -output ${INSTALL_LIB_DIR}/libcrypto.a
 
 cp -R ${CURRENTPATH}/bin/iPhoneSimulator${SDKVERSION}.sdk/include/openssl ${INSTALL_INC_DIR}
+for pc in ${CURRENTPATH}/bin/MacOSX/lib/pkgconfig/*.pc; do
+  sed -e "s,^prefix=.*$,prefix=${INSTALL_DIR},g" $pc >  ${INSTALL_LIB_DIR}/pkgconfig/$(basename $pc)
+done
 echo "Building done."
 echo "Cleaning up..."
 rm -rf ${CURRENTPATH}/src
