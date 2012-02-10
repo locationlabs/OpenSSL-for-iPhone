@@ -6,3 +6,5 @@ OpenSSL-for-iOS.xcodeproj/project.xcworkspace/
 OpenSSL-for-iOS.xcodeproj/xcuserdata/
 include/openssl/opensslconf.h
 results
+bin
+src
