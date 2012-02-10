@@ -33,6 +33,12 @@ SDKVERSION="5.0"
 
 
 CURRENTPATH=`pwd`
+INSTALL_DIR=${INSTALL_DIR:=${CURRENTPATH}/results}
+INSTALL_INC_DIR=${INSTALL_DIR}/include
+INSTALL_LIB_DIR=${INSTALL_DIR}/lib
+mkdir -p ${INSTALL_INC_DIR}
+mkdir -p ${INSTALL_LIB_DIR}
+
 CONFIG_VAR="no-dso no-dsa no-engine no-gost no-ec no-dh no-krb5 no-asm no-hw no-des no-ssl2 no-idea no-rc2 -DOPENSSL_NO_BUF_FREELISTS"
 
 set -e
@@ -125,13 +131,12 @@ make clean >> "${LOG}" 2>&1
 #############
 
 echo "Build library..."
-lipo -create ${CURRENTPATH}/bin/MacOSX/lib/libssl.a ${CURRENTPATH}/bin/iPhoneSimulator${SDKVERSION}.sdk/lib/libssl.a ${CURRENTPATH}/bin/iPhoneOS${SDKVERSION}-armv6.sdk/lib/libssl.a ${CURRENTPATH}/bin/iPhoneOS${SDKVERSION}-armv7.sdk/lib/libssl.a -output ${CURRENTPATH}/libssl.a
+lipo -create ${CURRENTPATH}/bin/MacOSX/lib/libssl.a ${CURRENTPATH}/bin/iPhoneSimulator${SDKVERSION}.sdk/lib/libssl.a ${CURRENTPATH}/bin/iPhoneOS${SDKVERSION}-armv6.sdk/lib/libssl.a ${CURRENTPATH}/bin/iPhoneOS${SDKVERSION}-armv7.sdk/lib/libssl.a -output ${INSTALL_LIB_DIR}/libssl.a
 
 
-lipo -create ${CURRENTPATH}/bin/MacOSX/lib/libcrypto.a ${CURRENTPATH}/bin/iPhoneSimulator${SDKVERSION}.sdk/lib/libcrypto.a ${CURRENTPATH}/bin/iPhoneOS${SDKVERSION}-armv6.sdk/lib/libcrypto.a ${CURRENTPATH}/bin/iPhoneOS${SDKVERSION}-armv7.sdk/lib/libcrypto.a -output ${CURRENTPATH}/libcrypto.a
+lipo -create ${CURRENTPATH}/bin/MacOSX/lib/libcrypto.a ${CURRENTPATH}/bin/iPhoneSimulator${SDKVERSION}.sdk/lib/libcrypto.a ${CURRENTPATH}/bin/iPhoneOS${SDKVERSION}-armv6.sdk/lib/libcrypto.a ${CURRENTPATH}/bin/iPhoneOS${SDKVERSION}-armv7.sdk/lib/libcrypto.a -output ${INSTALL_LIB_DIR}/libcrypto.a
 
-mkdir -p ${CURRENTPATH}/include
-cp -R ${CURRENTPATH}/bin/iPhoneSimulator${SDKVERSION}.sdk/include/openssl ${CURRENTPATH}/include/
+cp -R ${CURRENTPATH}/bin/iPhoneSimulator${SDKVERSION}.sdk/include/openssl ${INSTALL_INC_DIR}
 echo "Building done."
 echo "Cleaning up..."
 rm -rf ${CURRENTPATH}/src
