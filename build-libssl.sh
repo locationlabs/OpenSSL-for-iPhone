@@ -85,7 +85,6 @@ LOG="${CURRENTPATH}/bin/iPhoneSimulator${SDKVERSION}.sdk/build-openssl-${VERSION
 sed -ie "s!^CFLAG=!CFLAG=-miphoneos-version-min=${MIN_IOS_VERSION} -isysroot ${DEVELOPER}/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator${SDKVERSION}.sdk !" "Makefile"
 
 make >> "${LOG}" 2>&1
-#make depend >> "${LOG}" 2>&1
 make install >> "${LOG}" 2>&1
 make clean >> "${LOG}" 2>&1
 #############
@@ -107,7 +106,6 @@ sed -ie "s!^CFLAG=!CFLAG=-miphoneos-version-min=${MIN_IOS_VERSION} -isysroot ${D
 sed -ie "s!static volatile sig_atomic_t intr_signal;!static volatile intr_signal;!" "crypto/ui/ui_openssl.c"
 
 make >> "${LOG}" 2>&1
-#make depend >> "${LOG}" 2>&1
 make install >> "${LOG}" 2>&1
 make clean >> "${LOG}" 2>&1
 #############
@@ -130,7 +128,6 @@ sed -ie "s!^CFLAG=!CFLAG=-miphoneos-version-min=${MIN_IOS_VERSION} -isysroot ${D
 sed -ie "s!static volatile sig_atomic_t intr_signal;!static volatile intr_signal;!" "crypto/ui/ui_openssl.c"
 
 make >> "${LOG}" 2>&1
-#make depend >> "${LOG}" 2>&1
 make install >> "${LOG}" 2>&1
 make clean >> "${LOG}" 2>&1
 #############
