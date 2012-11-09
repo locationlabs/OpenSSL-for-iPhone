@@ -90,27 +90,6 @@ make clean >> "${LOG}" 2>&1
 #############
 
 #############
-# iPhoneOS armv6
-echo "Building openssl for iPhoneOS ${SDKVERSION} armv6"
-echo "Please stand by..."
-
-export CC="${DEVELOPER}/Platforms/iPhoneOS.platform/Developer/usr/bin/gcc -arch armv6"
-mkdir -p "${CURRENTPATH}/bin/iPhoneOS${SDKVERSION}-armv6.sdk"
-
-LOG="${CURRENTPATH}/bin/iPhoneOS${SDKVERSION}-armv6.sdk/build-openssl-${VERSION}.log"
-
-./Configure BSD-generic32 ${CONFIG_VAR} --openssldir="${CURRENTPATH}/bin/iPhoneOS${SDKVERSION}-armv6.sdk" > "${LOG}" 2>&1
-
-sed -ie "s!^CFLAG=!CFLAG=-miphoneos-version-min=${MIN_IOS_VERSION} -isysroot ${DEVELOPER}/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS${SDKVERSION}.sdk !" "Makefile"
-# remove sig_atomic for iPhoneOS
-sed -ie "s!static volatile sig_atomic_t intr_signal;!static volatile intr_signal;!" "crypto/ui/ui_openssl.c"
-
-make >> "${LOG}" 2>&1
-make install >> "${LOG}" 2>&1
-make clean >> "${LOG}" 2>&1
-#############
-
-#############
 # iPhoneOS armv7
 echo "Building openssl for iPhoneOS ${SDKVERSION} armv7"
 echo "Please stand by..."
@@ -133,10 +112,10 @@ make clean >> "${LOG}" 2>&1
 #############
 
 echo "Build library..."
-lipo -create ${CURRENTPATH}/bin/MacOSX/lib/libssl.a ${CURRENTPATH}/bin/iPhoneSimulator${SDKVERSION}.sdk/lib/libssl.a ${CURRENTPATH}/bin/iPhoneOS${SDKVERSION}-armv6.sdk/lib/libssl.a ${CURRENTPATH}/bin/iPhoneOS${SDKVERSION}-armv7.sdk/lib/libssl.a -output ${INSTALL_LIB_DIR}/libssl.a
+lipo -create ${CURRENTPATH}/bin/MacOSX/lib/libssl.a ${CURRENTPATH}/bin/iPhoneSimulator${SDKVERSION}.sdk/lib/libssl.a ${CURRENTPATH}/bin/iPhoneOS${SDKVERSION}-armv7.sdk/lib/libssl.a -output ${INSTALL_LIB_DIR}/libssl.a
 
 
-lipo -create ${CURRENTPATH}/bin/MacOSX/lib/libcrypto.a ${CURRENTPATH}/bin/iPhoneSimulator${SDKVERSION}.sdk/lib/libcrypto.a ${CURRENTPATH}/bin/iPhoneOS${SDKVERSION}-armv6.sdk/lib/libcrypto.a ${CURRENTPATH}/bin/iPhoneOS${SDKVERSION}-armv7.sdk/lib/libcrypto.a -output ${INSTALL_LIB_DIR}/libcrypto.a
+lipo -create ${CURRENTPATH}/bin/MacOSX/lib/libcrypto.a ${CURRENTPATH}/bin/iPhoneSimulator${SDKVERSION}.sdk/lib/libcrypto.a ${CURRENTPATH}/bin/iPhoneOS${SDKVERSION}-armv7.sdk/lib/libcrypto.a -output ${INSTALL_LIB_DIR}/libcrypto.a
 
 cp -R ${CURRENTPATH}/bin/iPhoneSimulator${SDKVERSION}.sdk/include/openssl ${INSTALL_INC_DIR}
 for pc in ${CURRENTPATH}/bin/MacOSX/lib/pkgconfig/*.pc; do
