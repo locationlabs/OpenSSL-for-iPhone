@@ -94,7 +94,7 @@ make clean >> "${LOG}" 2>&1
 echo "Building openssl for iPhoneOS ${SDKVERSION} armv7"
 echo "Please stand by..."
 
-export CC="${DEVELOPER}/Platforms/iPhoneOS.platform/Developer/usr/bin/gcc -arch armv7"
+export CC="${DEVELOPER}/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -arch armv7"
 mkdir -p "${CURRENTPATH}/bin/iPhoneOS${SDKVERSION}-armv7.sdk"
 
 LOG="${CURRENTPATH}/bin/iPhoneOS${SDKVERSION}-armv7.sdk/build-openssl-${VERSION}.log"
