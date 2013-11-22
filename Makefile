@@ -23,6 +23,10 @@ SDKVERSION=$(shell xcodebuild -showsdks | grep iphoneos | sed -e 's/.*iphoneos//
 
 CONFIG_VAR=no-dso no-dsa no-engine no-gost no-ec no-dh no-krb5 no-asm no-hw no-des no-ssl2 no-idea no-rc2 -DOPENSSL_NO_BUF_FREELISTS
 
+IOS_BASE=$(CURRENTPATH)/bin/iPhoneOS$(SDKVERSION)
+SIM_BASE=$(CURRENTPATH)/bin/iPhoneSimulator$(SDKVERSION)
+OPENSSL_SRC=$(CURRENTPATH)/src/openssl-$(OPENSSL_VERSION)
+
 # setup
 
 $(CURRENTPATH)/src/touched:
@@ -32,64 +36,43 @@ $(CURRENTPATH)/src/touched:
 	tar zxf openssl-$(OPENSSL_VERSION).tar.gz -C $(CURRENTPATH)/src
 	touch $(CURRENTPATH)/src/touched
 
-# i386 (iPhoneSimulator)
+include Makefile.simulator
+include Makefile.arm
 
-$(CURRENTPATH)/bin/iPhoneSimulator$(SDKVERSION).sdk/lib/libssl.a: $(CURRENTPATH)/src/openssl-$(OPENSSL_VERSION)/touched_iphonesimulator_i386
 
-$(CURRENTPATH)/bin/iPhoneSimulator$(SDKVERSION).sdk/lib/libcrypto.a: $(CURRENTPATH)/src/openssl-$(OPENSSL_VERSION)/touched_iphonesimulator_i386
+ARMV7_LIB=$(IOS_BASE)-armv7.sdk/lib
 
-$(CURRENTPATH)/src/openssl-$(OPENSSL_VERSION)/touched_iphonesimulator_i386: $(CURRENTPATH)/src/touched
-	@echo "Building openssl for iPhoneSimulator $(SDKVERSION) i386"
-	@echo "Please stand by..."
-	mkdir -p $(CURRENTPATH)/bin/iPhoneSimulator$(SDKVERSION).sdk
-	CC="$(DEVELOPER)/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -arch i386" && (cd $(CURRENTPATH)/src/openssl-$(OPENSSL_VERSION) && $(MAKE) clean && ./Configure BSD-generic32 $(CONFIG_VAR) --openssldir=$(CURRENTPATH)/bin/iPhoneSimulator$(SDKVERSION).sdk && sed -ie "s!^CFLAG=!CFLAG=-miphoneos-version-min=$(MIN_IOS_VERSION) -isysroot $(DEVELOPER)/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator$(SDKVERSION).sdk !" "Makefile" && $(MAKE) && $(MAKE) install && $(MAKE) clean ) > $(CURRENTPATH)/bin/iPhoneSimulator$(SDKVERSION).sdk/build-openssl-$(OPENSSL_VERSION).log 2>&1
-	touch $@
+$(ARMV7_LIB)/libssl.a: $(OPENSSL_SRC)/touched_armv7
 
-# armv7
+$(ARMV7_LIB)/libcrypto.a: $(OPENSSL_SRC)/touched_armv7
 
-$(CURRENTPATH)/bin/iPhoneOS$(SDKVERSION)-armv7.sdk/lib/libssl.a: $(CURRENTPATH)/src/openssl-$(OPENSSL_VERSION)/touched_armv7
+$(OPENSSL_SRC)/touched_armv7: $(CURRENTPATH)/src/touched
+	$(call build_arm,armv7,$@)
 
-$(CURRENTPATH)/bin/iPhoneOS$(SDKVERSION)-armv7.sdk/lib/libcrypto.a: $(CURRENTPATH)/src/openssl-$(OPENSSL_VERSION)/touched_armv7
 
-$(CURRENTPATH)/src/openssl-$(OPENSSL_VERSION)/touched_armv7: $(CURRENTPATH)/src/touched
-	@echo "Building openssl for iOS $(SDKVERSION) armv7"
-	@echo "Please stand by..."
-	mkdir -p $(CURRENTPATH)/bin/iPhoneOS$(SDKVERSION)-armv7.sdk
-	export CC="$(DEVELOPER)/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -arch armv7" && (cd $(CURRENTPATH)/src/openssl-$(OPENSSL_VERSION) && $(MAKE) clean && ./Configure BSD-generic32 $(CONFIG_VAR) --openssldir=$(CURRENTPATH)/bin/iPhoneOS$(SDKVERSION)-armv7.sdk && sed -ie "s!^CFLAG=!CFLAG=-miphoneos-version-min=${MIN_IOS_VERSION} -isysroot ${DEVELOPER}/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS${SDKVERSION}.sdk !" "Makefile" && sed -ie "s!static volatile sig_atomic_t intr_signal;!static volatile intr_signal;!" "crypto/ui/ui_openssl.c" && $(MAKE) && $(MAKE) install && $(MAKE) clean ) > $(CURRENTPATH)/bin/iPhoneOS$(SDKVERSION)-armv7.sdk/build-openssl-$(OPENSSL_VERSION).log 2>&1
-	touch $@
+ARMV7S_LIB=$(IOS_BASE)-armv7s.sdk/lib
 
-# armv7s
+$(ARMV7S_LIB)/libssl.a: $(OPENSSL_SRC)/touched_armv7s
 
-$(CURRENTPATH)/bin/iPhoneOS$(SDKVERSION)-armv7s.sdk/lib/libssl.a: $(CURRENTPATH)/src/openssl-$(OPENSSL_VERSION)/touched_armv7s
+$(ARMV7S_LIB)/libcrypto.a: $(OPENSSL_SRC)/touched_armv7s
 
-$(CURRENTPATH)/bin/iPhoneOS$(SDKVERSION)-armv7s.sdk/lib/libcrypto.a: $(CURRENTPATH)/src/openssl-$(OPENSSL_VERSION)/touched_armv7s
+$(OPENSSL_SRC)/touched_armv7s: $(CURRENTPATH)/src/touched
+	$(call build_arm,armv7s,$@)
 
-$(CURRENTPATH)/src/openssl-$(OPENSSL_VERSION)/touched_armv7s: $(CURRENTPATH)/src/touched
-	@echo "Building openssl for iOS $(SDKVERSION) armv7s"
-	@echo "Please stand by..."
-	mkdir -p $(CURRENTPATH)/bin/iPhoneOS$(SDKVERSION)-armv7s.sdk
-	export CC="$(DEVELOPER)/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -arch armv7s" && (cd $(CURRENTPATH)/src/openssl-$(OPENSSL_VERSION) && $(MAKE) clean && ./Configure BSD-generic32 $(CONFIG_VAR) --openssldir=$(CURRENTPATH)/bin/iPhoneOS$(SDKVERSION)-armv7s.sdk && sed -ie "s!^CFLAG=!CFLAG=-miphoneos-version-min=${MIN_IOS_VERSION} -isysroot ${DEVELOPER}/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS${SDKVERSION}.sdk !" "Makefile" && sed -ie "s!static volatile sig_atomic_t intr_signal;!static volatile intr_signal;!" "crypto/ui/ui_openssl.c" && $(MAKE) && $(MAKE) install && $(MAKE) clean ) > $(CURRENTPATH)/bin/iPhoneOS$(SDKVERSION)-armv7s.sdk/build-openssl-$(OPENSSL_VERSION).log 2>&1
-	touch $@
 
-# arm64
+ARM64_LIB=$(IOS_BASE)-arm64.sdk/lib
 
-$(CURRENTPATH)/bin/iPhoneOS$(SDKVERSION)-arm64.sdk/lib/libssl.a: $(CURRENTPATH)/src/openssl-$(OPENSSL_VERSION)/touched_arm64
+$(ARM64_LIB)/libssl.a: $(OPENSSL_SRC)/touched_arm64
 
-$(CURRENTPATH)/bin/iPhoneOS$(SDKVERSION)-arm64.sdk/lib/libcrypto.a: $(CURRENTPATH)/src/openssl-$(OPENSSL_VERSION)/touched_arm64
+$(ARM64_LIB)/libcrypto.a: $(OPENSSL_SRC)/touched_arm64
 
-$(CURRENTPATH)/src/openssl-$(OPENSSL_VERSION)/touched_arm64: $(CURRENTPATH)/src/touched
-	@echo "Building openssl for iOS $(SDKVERSION) arm64"
-	@echo "Please stand by..."
-	mkdir -p $(CURRENTPATH)/bin/iPhoneOS$(SDKVERSION)-arm64.sdk
-	export CC="$(DEVELOPER)/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -arch arm64" && (cd $(CURRENTPATH)/src/openssl-$(OPENSSL_VERSION) && $(MAKE) clean && ./Configure BSD-generic32 $(CONFIG_VAR) --openssldir=$(CURRENTPATH)/bin/iPhoneOS$(SDKVERSION)-arm64.sdk && sed -ie "s!^CFLAG=!CFLAG=-miphoneos-version-min=${MIN_IOS_VERSION} -isysroot ${DEVELOPER}/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS${SDKVERSION}.sdk !" "Makefile" && sed -ie "s!static volatile sig_atomic_t intr_signal;!static volatile intr_signal;!" "crypto/ui/ui_openssl.c" && $(MAKE) && $(MAKE) install && $(MAKE) clean ) > $(CURRENTPATH)/bin/iPhoneOS$(SDKVERSION)-arm64.sdk/build-openssl-$(OPENSSL_VERSION).log 2>&1
-	touch $@
+$(OPENSSL_SRC)/touched_arm64: $(CURRENTPATH)/src/touched
+	$(call build_arm,arm64,$@)
+
 
 # lipo it up
 
-$(INSTALL_LIB_DIR)/libssl.a: $(CURRENTPATH)/bin/iPhoneSimulator$(SDKVERSION).sdk/lib/libssl.a $(CURRENTPATH)/bin/iPhoneOS$(SDKVERSION)-armv7.sdk/lib/libssl.a $(CURRENTPATH)/bin/iPhoneOS$(SDKVERSION)-armv7s.sdk/lib/libssl.a $(CURRENTPATH)/bin/iPhoneOS$(SDKVERSION)-arm64.sdk/lib/libssl.a
-	lipo -create $^ -output $@
-
-$(INSTALL_LIB_DIR)/libcrypto.a: $(CURRENTPATH)/bin/iPhoneSimulator$(SDKVERSION).sdk/lib/libcrypto.a $(CURRENTPATH)/bin/iPhoneOS$(SDKVERSION)-armv7.sdk/lib/libcrypto.a $(CURRENTPATH)/bin/iPhoneOS$(SDKVERSION)-armv7s.sdk/lib/libcrypto.a $(CURRENTPATH)/bin/iPhoneOS$(SDKVERSION)-arm64.sdk/lib/libcrypto.a
+$(INSTALL_LIB_DIR)/%.a: $(ARMV7_LIB)/%.a $(ARMV7S_LIB)/%.a $(ARM64_LIB)/%.a $(SIM_BASE).sdk/lib/%.a 
 	lipo -create $^ -output $@
 
 all: $(INSTALL_LIB_DIR)/libssl.a $(INSTALL_LIB_DIR)/libcrypto.a
