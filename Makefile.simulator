@@ -1,10 +1,8 @@
-$(SIM_BASE)/lib/libssl.a: $(TOUCH_BASE)/sim
-
-$(SIM_BASE)/lib/libcrypto.a: $(TOUCH_BASE)/sim
+$(SIM_BASE)/lib/libssl.a $(SIM_BASE)/lib/libcrypto.a: $(TOUCH_BASE)/sim
 
 $(TOUCH_BASE)/sim: $(PREPARE_TOUCH)
 	@echo "Building openssl for iPhoneSimulator $(SDKVERSION) i386"
 	@echo "Please stand by..."
 	mkdir -p $(SIM_BASE)
-	CC="$(DEVELOPER)/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -arch i386 " && (cd $(OPENSSL_SRC) && $(MAKE) clean && ./Configure BSD-generic32 $(CONFIG_VAR) --openssldir=$(SIM_BASE) && sed -ie "s!^CFLAG=!CFLAG=-miphoneos-version-min=$(MIN_IOS_VERSION) -isysroot $(DEVELOPER)/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator$(SDKVERSION).sdk !" "Makefile" && $(MAKE) && $(MAKE) install && $(MAKE) clean ) > $(SIM_BASE)/build-openssl-$(OPENSSL_VERSION).log 2>&1
+	CC="$(DEVELOPER)/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -arch i386 " && (cd $(OPENSSL_SRC) && $(MAKE) clean && ./Configure BSD-generic32 $(CONFIG_VAR) --openssldir=$(SIM_BASE) && sed -ie "s!^CFLAG=!CFLAG=-miphoneos-version-min=$(MIN_IOS_VERSION) -isysroot $(DEVELOPER)/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator$(SDKVERSION).sdk !" "makefile" && $(MAKE) && $(MAKE) install && $(MAKE) clean ) > $(SIM_BASE)/build-openssl-$(OPENSSL_VERSION).log 2>&1
 	touch $@
