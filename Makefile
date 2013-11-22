@@ -21,7 +21,7 @@ INSTALL_LIB_DIR=$(INSTALL_DIR)/lib
 DEVELOPER=$(shell xcode-select -print-path)
 SDKVERSION=$(shell xcodebuild -showsdks | grep iphoneos | sed -e 's/.*iphoneos//g' | tail -n 1)
 
-CONFIG_VAR=no-dso no-dsa no-engine no-gost no-ec no-dh no-krb5 no-asm no-hw no-des no-ssl2 no-idea no-rc2 -DOPENSSL_NO_BUF_FREELISTS
+CONFIG_VAR=no-dso no-dsa no-engine no-gost no-ec no-dh no-krb5 no-asm no-hw no-des no-idea no-rc2 -DOPENSSL_NO_BUF_FREELISTS
 
 IOS_BASE=$(CURRENTPATH)/bin/iPhoneOS$(SDKVERSION)
 SIM_BASE=$(CURRENTPATH)/bin/iPhoneSimulator$(SDKVERSION)
