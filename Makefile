@@ -13,9 +13,8 @@ MIN_IOS_VERSION=6.0
 #
 ###########################################################################
 
-
-CURRENTPATH=$(shell pwd)
-INSTALL_DIR?=$(CURRENTPATH)/results
+HOME_DIR ?= $(shell pwd)
+INSTALL_DIR ?= $(HOME_DIR)/results
 INSTALL_INC_DIR=$(INSTALL_DIR)/include
 INSTALL_LIB_DIR=$(INSTALL_DIR)/lib
 DEVELOPER=$(shell xcode-select -print-path)
@@ -23,63 +22,75 @@ SDKVERSION=$(shell xcodebuild -showsdks | grep iphoneos | sed -e 's/.*iphoneos//
 
 CONFIG_VAR=no-dso no-dsa no-engine no-gost no-ec no-dh no-krb5 no-asm no-hw no-des no-idea no-rc2 -DOPENSSL_NO_BUF_FREELISTS
 
-IOS_BASE=$(CURRENTPATH)/bin/iPhoneOS$(SDKVERSION)
-SIM_BASE=$(CURRENTPATH)/bin/iPhoneSimulator$(SDKVERSION)
-OPENSSL_SRC=$(CURRENTPATH)/src/openssl-$(OPENSSL_VERSION)
+IOS_BASE=$(INSTALL_DIR)/bin/iPhoneOS$(SDKVERSION)
+SIM_BASE=$(INSTALL_DIR)/bin/iPhoneSimulator$(SDKVERSION)
+OPENSSL_SRC=$(INSTALL_DIR)/src/openssl-$(OPENSSL_VERSION)
 
-# setup
+TOUCH_BASE=$(INSTALL_DIR)/touched
+PREPARE_TOUCH=$(TOUCH_BASE)/prepare
 
-$(CURRENTPATH)/src/touched:
-	mkdir -p $(CURRENTPATH)/src
+#########
+# setup #
+#########
+
+$(PREPARE_TOUCH):
+	mkdir -p $(INSTALL_DIR)/src
 	mkdir -p $(INSTALL_INC_DIR)
-	mkdir -p $(INSTALL_LIB_DIR)/pkgconfig
-	tar zxf openssl-$(OPENSSL_VERSION).tar.gz -C $(CURRENTPATH)/src
-	touch $(CURRENTPATH)/src/touched
+	mkdir -p $(TOUCH_BASE)
+	tar zxf $(HOME_DIR)/openssl-$(OPENSSL_VERSION).tar.gz -C $(INSTALL_DIR)/src
+	touch $(PREPARE_TOUCH)
 
-include Makefile.simulator
-include Makefile.arm
+include $(dir $(word $(words $(MAKEFILE_LIST)),$(MAKEFILE_LIST)))Makefile.simulator
+include $(dir $(word $(words $(MAKEFILE_LIST)),$(MAKEFILE_LIST)))Makefile.arm
 
+#########
+# armv7 #
+#########
 
-ARMV7_LIB=$(IOS_BASE)-armv7.sdk/lib
+ARMV7_LIB=$(IOS_BASE)-armv7/lib
 
-$(ARMV7_LIB)/libssl.a: $(OPENSSL_SRC)/touched_armv7
+$(ARMV7_LIB)/libssl.a: $(TOUCH_BASE)/armv7
 
-$(ARMV7_LIB)/libcrypto.a: $(OPENSSL_SRC)/touched_armv7
+$(ARMV7_LIB)/libcrypto.a: $(TOUCH_BASE)/armv7
 
-$(OPENSSL_SRC)/touched_armv7: $(CURRENTPATH)/src/touched
+$(TOUCH_BASE)/armv7: $(PREPARE_TOUCH)
 	$(call build_arm,armv7,$@)
 
+##########
+# armv7s #
+##########
 
-ARMV7S_LIB=$(IOS_BASE)-armv7s.sdk/lib
+ARMV7S_LIB=$(IOS_BASE)-armv7s/lib
 
-$(ARMV7S_LIB)/libssl.a: $(OPENSSL_SRC)/touched_armv7s
+$(ARMV7S_LIB)/libssl.a: $(TOUCH_BASE)/armv7s
 
-$(ARMV7S_LIB)/libcrypto.a: $(OPENSSL_SRC)/touched_armv7s
+$(ARMV7S_LIB)/libcrypto.a: $(TOUCH_BASE)/armv7s
 
-$(OPENSSL_SRC)/touched_armv7s: $(CURRENTPATH)/src/touched
+$(TOUCH_BASE)/armv7s: $(PREPARE_TOUCH)
 	$(call build_arm,armv7s,$@)
 
+#########
+# arm64 #
+#########
 
-ARM64_LIB=$(IOS_BASE)-arm64.sdk/lib
+ARM64_LIB=$(IOS_BASE)-arm64/lib
 
-$(ARM64_LIB)/libssl.a: $(OPENSSL_SRC)/touched_arm64
+$(ARM64_LIB)/libssl.a: $(TOUCH_BASE)/arm64
 
-$(ARM64_LIB)/libcrypto.a: $(OPENSSL_SRC)/touched_arm64
+$(ARM64_LIB)/libcrypto.a: $(TOUCH_BASE)/arm64
 
-$(OPENSSL_SRC)/touched_arm64: $(CURRENTPATH)/src/touched
+$(TOUCH_BASE)/arm64: $(PREPARE_TOUCH)
 	$(call build_arm,arm64,$@)
 
+##############
+# lipo it up #
+##############
 
-# lipo it up
-
-$(INSTALL_LIB_DIR)/%.a: $(ARMV7_LIB)/%.a $(ARMV7S_LIB)/%.a $(ARM64_LIB)/%.a $(SIM_BASE).sdk/lib/%.a 
+$(INSTALL_LIB_DIR)/%.a: $(ARMV7_LIB)/%.a $(ARMV7S_LIB)/%.a $(ARM64_LIB)/%.a $(SIM_BASE)/lib/%.a 
 	lipo -create $^ -output $@
 
 all: $(INSTALL_LIB_DIR)/libssl.a $(INSTALL_LIB_DIR)/libcrypto.a
-	cp -R $(CURRENTPATH)/bin/iPhoneSimulator$(SDKVERSION).sdk/include/openssl $(INSTALL_INC_DIR)
-
-clean:
-	rm -rf bin/ src/
+	cp -R $(INSTALL_DIR)/bin/iPhoneSimulator$(SDKVERSION)/include/openssl $(INSTALL_INC_DIR)
 
 ##
 ## Local Variables:
