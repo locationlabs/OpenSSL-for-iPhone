@@ -22,8 +22,8 @@ SDKVERSION=$(shell xcodebuild -showsdks | grep iphoneos | sed -e 's/.*iphoneos//
 
 CONFIG_VAR=no-dso no-dsa no-engine no-gost no-ec no-dh no-krb5 no-asm no-hw no-des no-idea no-rc2 -DOPENSSL_NO_BUF_FREELISTS
 
-IOS_BASE=$(INSTALL_DIR)/bin/iPhoneOS$(SDKVERSION)
-SIM_BASE=$(INSTALL_DIR)/bin/iPhoneSimulator$(SDKVERSION)
+IOS_BASE=$(INSTALL_DIR)/bin/iphoneos$(SDKVERSION)
+SIM_BASE=$(INSTALL_DIR)/bin/iphonesimulator$(SDKVERSION)
 OPENSSL_SRC=$(INSTALL_DIR)/src/openssl-$(OPENSSL_VERSION)
 
 TOUCH_BASE=$(INSTALL_DIR)/touched
@@ -84,7 +84,7 @@ $(INSTALL_LIB_DIR)/%.a: $(ARMV7_LIB)/%.a $(ARMV7S_LIB)/%.a $(ARM64_LIB)/%.a $(SI
 	lipo -create $^ -output $@
 
 all: $(INSTALL_LIB_DIR)/libssl.a $(INSTALL_LIB_DIR)/libcrypto.a
-	cp -R $(INSTALL_DIR)/bin/iPhoneSimulator$(SDKVERSION)/include/openssl $(INSTALL_INC_DIR)
+	cp -R $(INSTALL_DIR)/bin/iphonesimulator$(SDKVERSION)/include/openssl $(INSTALL_INC_DIR)
 
 
 ##
