@@ -1,6 +1,6 @@
-$(SIM_BASE)/lib/libssl.a $(SIM_BASE)/lib/libcrypto.a: $(TOUCH_BASE)/sim
+$(SIM_BASE)/lib/libssl.a $(SIM_BASE)/lib/libcrypto.a: $(TOUCH_BASE)/i386
 
-$(TOUCH_BASE)/sim: $(PREPARE_TOUCH)
+$(TOUCH_BASE)/i386: $(PREPARE_TOUCH)
 	@echo "Building openssl for iPhoneSimulator $(SDKVERSION) i386"
 	@echo "Please stand by..."
 	mkdir -p $(SIM_BASE)

@@ -49,9 +49,9 @@ include $(dir $(word $(words $(MAKEFILE_LIST)),$(MAKEFILE_LIST)))Makefile.arm
 
 ARMV7_LIB=$(IOS_BASE)-armv7/lib
 
-$(ARMV7_LIB)/libssl.a $(ARMV7_LIB)/libcrypto.a: $(TOUCH_BASE)/armv7
+$(ARMV7_LIB)/libssl.a $(ARMV7_LIB)/libcrypto.a: $(TOUCH_BASE)/armv7 
 
-$(TOUCH_BASE)/armv7: $(PREPARE_TOUCH)
+$(TOUCH_BASE)/armv7: $(PREPARE_TOUCH) Makefile
 	$(call build_arm,armv7,$@)
 
 ##########
@@ -62,7 +62,7 @@ ARMV7S_LIB=$(IOS_BASE)-armv7s/lib
 
 $(ARMV7S_LIB)/libssl.a $(ARMV7S_LIB)/libcrypto.a: $(TOUCH_BASE)/armv7s
 
-$(TOUCH_BASE)/armv7s: $(PREPARE_TOUCH)
+$(TOUCH_BASE)/armv7s: $(PREPARE_TOUCH) Makefile
 	$(call build_arm,armv7s,$@)
 
 #########
@@ -73,7 +73,7 @@ ARM64_LIB=$(IOS_BASE)-arm64/lib
 
 $(ARM64_LIB)/libssl.a $(ARM64_LIB)/libcrypto.a: $(TOUCH_BASE)/arm64
 
-$(TOUCH_BASE)/arm64: $(PREPARE_TOUCH)
+$(TOUCH_BASE)/arm64: $(PREPARE_TOUCH) Makefile
 	$(call build_arm,arm64,$@)
 
 ##############
@@ -85,6 +85,7 @@ $(INSTALL_LIB_DIR)/%.a: $(ARMV7_LIB)/%.a $(ARMV7S_LIB)/%.a $(ARM64_LIB)/%.a $(SI
 
 all: $(INSTALL_LIB_DIR)/libssl.a $(INSTALL_LIB_DIR)/libcrypto.a
 	cp -R $(INSTALL_DIR)/bin/iPhoneSimulator$(SDKVERSION)/include/openssl $(INSTALL_INC_DIR)
+
 
 ##
 ## Local Variables:
