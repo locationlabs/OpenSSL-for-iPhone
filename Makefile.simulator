@@ -1,4 +1,4 @@
-$(SIM_BASE)-i386/lib/libssl.a $(SIM_BASE)/lib/libcrypto.a: $(TOUCH_BASE)/i386
+$(SIM_BASE)-i386/lib/libssl.a $(SIM_BASE)-i386/lib/libcrypto.a: $(TOUCH_BASE)/i386
 
 $(TOUCH_BASE)/i386: $(PREPARE_TOUCH)
 	@echo "Building openssl for iPhoneSimulator $(SDKVERSION) i386"

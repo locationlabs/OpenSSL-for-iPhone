@@ -80,7 +80,7 @@ $(TOUCH_BASE)/arm64: $(PREPARE_TOUCH) Makefile
 # lipo it up #
 ##############
 
-$(INSTALL_LIB_DIR)/%.a: $(ARMV7_LIB)/%.a $(ARMV7S_LIB)/%.a $(ARM64_LIB)/%.a $(SIM_BASE)/lib/%.a 
+$(INSTALL_LIB_DIR)/%.a: $(ARMV7_LIB)/%.a $(ARMV7S_LIB)/%.a $(ARM64_LIB)/%.a $(SIM_BASE)-i386/lib/%.a 
 	lipo -create $^ -output $@
 
 all: $(INSTALL_LIB_DIR)/libssl.a $(INSTALL_LIB_DIR)/libcrypto.a
