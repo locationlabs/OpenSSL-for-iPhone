@@ -84,7 +84,7 @@ $(INSTALL_LIB_DIR)/%.a: $(ARMV7_LIB)/%.a $(ARMV7S_LIB)/%.a $(ARM64_LIB)/%.a $(SI
 	lipo -create $^ -output $@
 
 all: $(INSTALL_LIB_DIR)/libssl.a $(INSTALL_LIB_DIR)/libcrypto.a
-	cp -R $(INSTALL_DIR)/bin/iphonesimulator$(SDKVERSION)/include/openssl $(INSTALL_INC_DIR)
+	cp -R $(SIM_BASE)-i386/include/openssl $(INSTALL_INC_DIR)
 
 
 ##
