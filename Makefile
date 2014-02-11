@@ -13,17 +13,23 @@ MIN_IOS_VERSION=6.0
 #
 ###########################################################################
 
+define sdkversion
+	$(shell xcodebuild -showsdks | grep $(1) | sed -e "s/.*$(1)//g" | tail -n 1)
+endef
+
 HOME_DIR ?= $(shell pwd)
 INSTALL_DIR ?= $(HOME_DIR)/results
 INSTALL_INC_DIR=$(INSTALL_DIR)/include
 INSTALL_LIB_DIR=$(INSTALL_DIR)/lib
 DEVELOPER=$(shell xcode-select -print-path)
-SDKVERSION=$(shell xcodebuild -showsdks | grep iphoneos | sed -e 's/.*iphoneos//g' | tail -n 1)
+IPHONE_SDKVERSION=$(call sdkversion,iphoneos)
+IPHONE_SIMULATOR_SDKVERSION=$(call sdkversion,iphoneos)
+MACOSX_SDKVERSION=$(call sdkversion,macosx)
 
 CONFIG_VAR=no-dso no-dsa no-engine no-gost no-ec no-dh no-krb5 no-asm no-hw no-des no-idea no-rc2 -DOPENSSL_NO_BUF_FREELISTS
 
-IOS_BASE=$(INSTALL_DIR)/bin/iphoneos$(SDKVERSION)
-SIM_BASE=$(INSTALL_DIR)/bin/iphonesimulator$(SDKVERSION)
+IOS_BASE=$(INSTALL_DIR)/bin/iphoneos$(IPHONE_SDKVERSION)
+SIM_BASE=$(INSTALL_DIR)/bin/iphonesimulator$(IPHONE_SIMULATOR_SDKVERSION)
 OPENSSL_SRC=$(INSTALL_DIR)/src/openssl-$(OPENSSL_VERSION)
 
 TOUCH_BASE=$(INSTALL_DIR)/touched
