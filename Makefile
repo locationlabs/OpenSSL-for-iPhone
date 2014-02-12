@@ -80,9 +80,9 @@ $(TOUCH_BASE)/macosx-x86_64: $(PREPARE_TOUCH) Makefile
 
 IPHONE_ARMV7_LIB=$(IOS_BASE)-armv7/lib
 
-$(IPHONE_ARMV7_LIB)/libssl.a $(IPHONE_ARMV7_LIB)/libcrypto.a: $(TOUCH_BASE)/iphone-armv7 
+$(IPHONE_ARMV7_LIB)/libssl.a $(IPHONE_ARMV7_LIB)/libcrypto.a: $(TOUCH_BASE)/iphoneos-armv7 
 
-$(TOUCH_BASE)/iphone-armv7: $(PREPARE_TOUCH) Makefile
+$(TOUCH_BASE)/iphoneos-armv7: $(PREPARE_TOUCH) Makefile
 	$(call build_arm,armv7,$@)
 
 #################
@@ -91,9 +91,9 @@ $(TOUCH_BASE)/iphone-armv7: $(PREPARE_TOUCH) Makefile
 
 IPHONE_ARMV7S_LIB=$(IOS_BASE)-armv7s/lib
 
-$(IPHONE_ARMV7S_LIB)/libssl.a $(IPHONE_ARMV7S_LIB)/libcrypto.a: $(TOUCH_BASE)/iphone-armv7s
+$(IPHONE_ARMV7S_LIB)/libssl.a $(IPHONE_ARMV7S_LIB)/libcrypto.a: $(TOUCH_BASE)/iphoneos-armv7s
 
-$(TOUCH_BASE)/iphone-armv7s: $(PREPARE_TOUCH) Makefile
+$(TOUCH_BASE)/iphoneos-armv7s: $(PREPARE_TOUCH) Makefile
 	$(call build_arm,armv7s,$@)
 
 ################
@@ -102,15 +102,15 @@ $(TOUCH_BASE)/iphone-armv7s: $(PREPARE_TOUCH) Makefile
 
 IPHONE_ARM64_LIB=$(IOS_BASE)-arm64/lib
 
-$(IPHONE_ARM64_LIB)/libssl.a $(IPHONE_ARM64_LIB)/libcrypto.a: $(TOUCH_BASE)/iphone-arm64
+$(IPHONE_ARM64_LIB)/libssl.a $(IPHONE_ARM64_LIB)/libcrypto.a: $(TOUCH_BASE)/iphoneos-arm64
 
-$(TOUCH_BASE)/iphone-arm64: $(PREPARE_TOUCH) Makefile
+$(TOUCH_BASE)/iphoneos-arm64: $(PREPARE_TOUCH) Makefile
 	$(call build_arm,arm64,$@)
 
 ##############
 # lipo it up #
 ##############
-$(IOS_INSTALL_LIB_DIR)/%.a: $(IPHONE_ARMV7_LIB)/%.a $(IPHONE_ARMV7S_LIB)/%.a $(IPHONE_ARM64_LIB)/%.a $(SIM_BASE)-i386/lib/%.a $(SIM_BASE)-x86_64/lib/%.a 
+$(IOS_INSTALL_LIB_DIR)/%.a: $(IPHONE_ARMV7_LIB)/%.a $(IPHONE_ARMV7S_LIB)/%.a $(IPHONE_ARM64_LIB)/%.a $(IPHONESIMULATOR_I386_LIB)/%.a $(IPHONESIMULATOR_X86_64_LIB)/%.a 
 	mkdir -p $(IOS_INSTALL_LIB_DIR)
 	lipo -create $^ -output $@
 

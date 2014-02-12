@@ -2,7 +2,7 @@ define build_arm
 	@echo "Building openssl for iOS $(IPHONE_SDKVERSION) $(1)"
 	@echo "Please stand by..."
 	mkdir -p $(IOS_BASE)-$(1)
-	export CC="$(DEVELOPER)/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -arch $(1)" && (cd $(OPENSSL_SRC) && $(MAKE) clean && ./Configure BSD-generic32 $(CONFIG_VAR) --openssldir=$(IOS_BASE)-$(1) && sed -ie "s!^CFLAG=!CFLAG=-miphoneos-version-min=${MIN_IOS_VERSION} -isysroot ${DEVELOPER}/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS${IPHONE_SDKVERSION}.sdk !" "Makefile" && sed -ie "s!static volatile sig_atomic_t intr_signal;!static volatile intr_signal;!" "crypto/ui/ui_openssl.c" && $(MAKE) && $(MAKE) install && $(MAKE) clean ) > $(IOS_BASE)-$(1)/build-openssl-$(OPENSSL_VERSION).log 2>&1
+	export CC="xcrun -sdk iphoneos clang -arch $(1)" && (cd $(OPENSSL_SRC) && $(MAKE) clean && ./Configure BSD-generic32 $(CONFIG_VAR) --openssldir=$(IOS_BASE)-$(1) && sed -ie "s!^CFLAG=!CFLAG=-miphoneos-version-min=${MIN_IOS_VERSION} -isysroot ${DEVELOPER}/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS${IPHONE_SDKVERSION}.sdk !" "Makefile" && sed -ie "s!static volatile sig_atomic_t intr_signal;!static volatile intr_signal;!" "crypto/ui/ui_openssl.c" && $(MAKE) && $(MAKE) install && $(MAKE) clean ) > $(IOS_BASE)-$(1)/build-openssl-$(OPENSSL_VERSION).log 2>&1
 	touch $(2)
 
 endef
